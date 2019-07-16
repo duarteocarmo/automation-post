@@ -40,7 +40,7 @@ Let us say you have an excel file (`sales_january.xlsx`) with a list of the sale
 
 <br/>
 <center>
-<img src="/images/january_sales_excel.png" alt="excel" style="width:50%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/january_sales_excel.png" alt="excel" style="width:50%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
@@ -59,7 +59,7 @@ When printing the `data` dataframe, we get the following:
 
 <br/>
 <center>
-<img src="/images/january_sales_table.png" alt="excel" style="width:40%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/january_sales_table.png" alt="excel" style="width:40%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
@@ -73,7 +73,7 @@ And get the following:
 
 <br/>
 <center>
-<img src="/images/january_sales_plot.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/january_sales_plot.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
@@ -113,7 +113,7 @@ The first step is to parameterize our notebook, to do this, let us create a `tem
 
 <br/>
 <center>
-<img src="/images/template_notebook_screenshot.png" alt="excel" style="width:100%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/template_notebook_screenshot.png" alt="excel" style="width:100%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
@@ -164,7 +164,7 @@ Which means, that Papermill has generated a new notebook for us, based on the `s
 
 <br/>
 <center>
-<img src="/images/february_sales_plot.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/february_sales_plot.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
@@ -182,7 +182,7 @@ Here is the basic architecture of the solution:
 
 <br/>
 <center>
-<img src="/images/architecture.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/architecture.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
@@ -268,8 +268,25 @@ A couple of notes about the script above:
 - After running `subprocess.run`, we apply the `.split` function, this is because the output of the `subprocess.run` function is a list of different files separated by a line break (`\n`). This split function allows us to but all the elements into a nicely formatted list. 
 - The `new_files` list will contain only files that are in the cloud directory, but not in the local directory, or in other words: the excel file that users have uploaded to the cloud drive. In case there are no differences, the function will return an empty list. 
 
-#### 2.Sync a cloud folder with a local folder and detect new files 
+#### 2.Using Papermill and Nbconvert to generate new reports
 
+Once we have a reliable way of detecting if new files are uploaded to the cloud, we now need to process that new file and generate an `html` report from it. 
 
+To do this, we will use two of the tools mentioned in the first part of this article: papermill, and nbconvert. 
 
+We start by creating a function that will create a new notebook file, based on an excel report. Using of course, a notebook template (as for example `template.ipynb`) as previously decribed. 
 
+```python
+import papermill as pm
+
+def run_notebook(excel_report, notebook_template):
+    # take only the name of the file, and ignore the .xlsx ending
+    no_extension_name = excel_report.split(".")[0]
+    # run with papermill
+    pm.execute_notebook(
+        notebook_template,
+        f"{no_extension_name}.ipynb",
+        parameters=dict(filename=excel_report),
+    )
+    return no_extension_name
+```
