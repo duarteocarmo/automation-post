@@ -21,6 +21,9 @@ Table of contents:
     - Etc next steps. 
 
 
+This is python 3.7 only (f strings and subprocess.run(capture_output))
+
+
 ## Automating report generation with Python
 
 Not everyone can code. This might seem like an obvious statement, but once you start using python to automate or analyze things around you, you start to encounter a big problem: reproducability. By this I mean the fact that not everyone can/ knows how to run your scripts, use your tools, etc. 
@@ -202,5 +205,71 @@ $ curl https://rclone.org/install.sh | sudo bash
 ```
 On windows, download the executable in the [Rclone downloads page](https://rclone.org/downloads/). 
 
-Once rclone is installed, we must configure it: 
+Once rclone is installed, we must configure it, depending on your cloud provider (Dropbox, Google Drive, OneDrive), the instructions will vary, so make sure the follow the [configuration instructions](https://rclone.org/).
+
+Once configured, lets do a first sync from the command line: 
+
+```bash
+$ rclone sync remote:REMOTE_FOLDER_NAME LOCAL_FOLDER_NAME
+```
+This will sync your local folder with your remote folder. 
+
+This can also easily be done from a python file using the core `subprocess` library. That allows you to run command line programs from python:
+
+```python
+import subprocess
+
+# define our variables, or folder names. 
+REMOTE_FOLDER_NAME="shared folder"
+LOCAL_FOLDER="local folder"
+
+# run the rclone sync command from python
+subprocess.run(
+        ["rclone", "sync", f"remote:{REMOTE_FOLDER_NAME}", LOCAL_FOLDER]
+    )
+```
+Now that we know how to sync a local and a cloud directory, how do we detect if a user has uploaded a new file to our cloud directory? Well, an option would be to navigate to our local directory and use the `ls` command. Rclone also [allows us](https://rclone.org/commands/rclone_ls/) to list files in our cloud directory. Having this, we can create a python function that detects new files if they have been uploaded:
+
+```python
+def get_new_files(remote_folder, local_folder):
+    """
+    A function that returns files that were uploaded to the cloud folder and 
+    do not exist in our local folder. 
+    """
+    # list the files in our cloud folder 
+    list_cloud = subprocess.run(
+        ["rclone", "lsf", f"remote:{remote_folder}"],
+        capture_output=True,
+        text=True,
+    )
+    
+    # transform the command output into a list 
+    cloud_directories = list_cloud.split("\n")[0:-1]
+
+    print(f"In the cloud we have: \n{cloud_directories}")
+
+    # list the files in our local folder 
+    list_cloud = subprocess.run(
+        ["ls", local_folder], capture_output=True, text=True
+    )
+
+    # transform the command output into a list
+    local_directories = list_cloud.stdout.split("\n")[0:-1]
+
+    print(f"In the local copy we have: \n{local_directories}")
+
+    # create a list with the differences between the two lists above 
+    new_files = list(set(cloud_directories) - set(local_directories))
+
+    return new_files
+```
+A couple of notes about the script above: 
+- The `capture_output` file in the `subprocess.run` function, allows us to capture the output of the command. The `text` flag allows us to treat everything as text, avoiding problems with spaces for example.
+- After running `subprocess.run`, we apply the `.split` function, this is because the output of the `subprocess.run` function is a list of different files separated by a line break (`\n`). This split function allows us to but all the elements into a nicely formatted list. 
+- The `new_files` list will contain only files that are in the cloud directory, but not in the local directory, or in other words: the excel file that users have uploaded to the cloud drive. In case there are no differences, the function will return an empty list. 
+
+#### 2.Sync a cloud folder with a local folder and detect new files 
+
+
+
 
