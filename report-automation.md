@@ -80,7 +80,7 @@ notebook link!
 [Browse the notebook here!]()
 
 
-## Generating html reports from Jupyter Notebooks
+## Generating html reports from Jupyter Notebooks to share with colleagues
 
 In my experience, the easiest way to share a report with colleagues is to use a little tool called [nbconvert](https://nbconvert.readthedocs.io/en/latest/). Nbconvert allows you to generate an html version of your notebook. To do this, start by navigating to the same directory where your notebook is and run the following from your terminal: 
 
@@ -164,3 +164,53 @@ Which means, that Papermill has generated a new notebook for us, based on the `s
 <img src="/images/february_sales_plot.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
+
+This is pretty handy! We could have a continuous script that always runs this notebook with different sales reports from different months. But how can we automate the process even more? 
+
+## A workflow to automatically generate reports in a shared cloud folder
+
+Let's imagine you want to generate automatic reports for every similar excel file. Furthemore, you want to share them with your colleagues. Your colleagues are interested in the reports, but not learning to program python, how would you proceed? 
+
+There are a lot of options, and hardly any incorrect ones, but one I found particularly interesting was using what we already had in a company: a cloud folder (Google Drive, OneDrive, Dropbox). 
+
+Cloud folders are very popular in companies, particularly shared ones. So a good idea would be to create a shared folder where everyone can upload sales excel reports, and automatically generate `html` reports from them, so everyone can read!
+
+Here is the basic architecture of the solution: 
+
+<br/>
+<center>
+<img src="/images/architecture.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+</center>
+<br/>
+
+Let's describe each one of the steps: 
+- A user uploads a new excel sales report to a shared cloud folder.
+- We sync the cloud folder with a local folder and detect that new excel sales report.
+- We use papermill to generate a new notebook file from that new excel sales report. 
+- We use nbconvert to generate an html file from that new notebook file. 
+- We upload the html file to the cloud folder, so the user can read it.  
+
+
+
+
+
+
+
+
+
+
+
+
+
+[Rclone](https://rclone.org/) is a handy tool that allows you to sync a cloud directory, (a google drive folder for example), and a local folder.
+
+
+
+
+To install it on a Mac or Linux machine, simply run: 
+
+```bash
+$ curl https://rclone.org/install.sh | sudo bash
+```
+On windows, download the executable in the [Rclone downloads page](https://rclone.org/downloads/). 
+
