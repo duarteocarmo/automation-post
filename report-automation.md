@@ -290,3 +290,23 @@ def run_notebook(excel_report, notebook_template):
     )
     return no_extension_name
 ```
+
+Then, we must convert the notebook to an html file. To do this, we create another function that calls the `nbconvert` command from the python interpreter. 
+
+```python
+import subprocess
+
+def generate_html_report(notebook_file):
+    generate = subprocess.run(
+        [
+            "jupyter",
+            "nbconvert",
+            notebook_file,
+            "--to=html",
+        ]
+    )
+    print("HTML Report was generated")
+    return True
+```
+
+This function runs the nbconvert command previously described, from a python script. 
