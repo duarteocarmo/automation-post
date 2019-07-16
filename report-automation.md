@@ -311,3 +311,6 @@ def push_to_cloud(remote_folder, html_report):
     print("Report Published!!!")
 ```
 
+#### 5.Bringing it all together
+So finally, after giving you a rundown of all of the major tools and processes, the full script that scans the cloud folder for new excel sales reports, and generates and uploads an html analysis of them is presented: 
+
