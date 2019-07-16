@@ -47,9 +47,10 @@ We start by importing the [pandas](https://pandas.pydata.org/) library. After th
 
 ```python
 import pandas as pd
+import matplotlib.pyplot as plt
+%matplotlib inline
 
 filename = "sales_january.xlsx"
-data = pd.read_excel(filename, index_col=0)
 ```
 When printing the `data` dataframe, we get the following:
 
@@ -123,7 +124,6 @@ Now that we have everything in place, let's generate a report for a new `februar
 Your directory should look like this: 
 
 ```bash
-├── base.ipynb
 ├── sales_february.xlsx
 ├── sales_january.html
 ├── sales_january.ipynb
@@ -138,7 +138,7 @@ import papermill as pm
 
 pm.execute_notebook(
    'template.ipynb',
-   'february_sales.ipynb',
+   'sales_february.ipynb',
    parameters=dict(filename="sales_february.xlsx")
 )
 ```
@@ -148,8 +148,19 @@ Let's brake this down: the `execute_notebook` takes 3 arguments. The first, `tem
 When running the above code, you will notice a new file in your directory: 
 
 
+```bash
+├── sales_february.ipynb <- This one!
+├── sales_february.xlsx
+├── sales_january.html
+├── sales_january.ipynb
+├── sales_january.xlsx
+└── template.ipynb
+```
 
+Which means, that Papermill has generated a new notebook for us, based on the `sales_february.xlsx`. When openning this notebook, we see a new graph with the new february numbers: 
 
-
-pm.execute_notebook('template.ipynb','february_sales.ipynb',parameters=dict(filename="sales_february.xlsx"))
-
+<br/>
+<center>
+<img src="/images/february_sales_plot.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+</center>
+<br/>
