@@ -1,26 +1,5 @@
 # Automating report generation with Papermill and Rclone
 
-
-Table of contents: 
-- The goal of the post
-    - Not everyone knows python
-    - Install python in other computers? 
-    - Deploy a completely new solution? 
-    - Use the tools we have
-- Creating a jupyter notebook report from an excel file 
-    - Simple excel file
-    - Notebook example
-- Converting the notebook to an html file
-    - Nbconvert to html
-- Using papermill to run the report for different excel files
-    - Example with another excel file 
-- Using rclone to sync directories 
-    - rclone 
-- Bringing it all together
-    - Script walkthrough
-    - Etc next steps. 
-
-
 This is python 3.7 only (f strings and subprocess.run(capture_output))
 
 
@@ -309,4 +288,26 @@ def generate_html_report(notebook_file):
     return True
 ```
 
-This function runs the nbconvert command previously described, from a python script. 
+This function runs the nbconvert command previously described in the beginning of the article, from a python script. 
+
+#### 4.Uploading an html file back to the cloud folder
+
+There is another Rclone command that is pretty handy. If you want to push a file from a local folder to a cloud folder, you can use the following from the command line:
+
+```bash
+$ rclone copy FILENAME remote:REMOTE_FOLDER_NAME
+```
+
+We could do it from the command line, but why not use it from python? With the subprocess library, it's pretty straighforward:
+
+
+```python
+import subprocess
+
+def push_to_cloud(remote_folder, html_report):
+    push = subprocess.run(
+        ["rclone", "copy", html_report, f"remote:{remote_folder}"]
+    )
+    print("Report Published!!!")
+```
+
