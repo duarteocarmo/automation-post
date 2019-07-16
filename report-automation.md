@@ -190,27 +190,17 @@ Let's describe each one of the steps:
 - We use nbconvert to generate an html file from that new notebook file. 
 - We upload the html file to the cloud folder, so the user can read it.  
 
+Let's start building this step by step: 
 
+#### 1.Sync a cloud folder with a local folder and detect new files 
+To sync cloud directories with local directories, we will a tool called [Rclone](https://rclone.org/). Of course we will integrate it with python.
 
-
-
-
-
-
-
-
-
-
-
-[Rclone](https://rclone.org/) is a handy tool that allows you to sync a cloud directory, (a google drive folder for example), and a local folder.
-
-
-
-
-To install it on a Mac or Linux machine, simply run: 
+Start by installing rclone in the same machine as your local folder (your personal computer or a virtual private server for example). On a Mac or linux: 
 
 ```bash
 $ curl https://rclone.org/install.sh | sudo bash
 ```
 On windows, download the executable in the [Rclone downloads page](https://rclone.org/downloads/). 
+
+Once rclone is installed, we must configure it: 
 
