@@ -33,6 +33,7 @@ import matplotlib.pyplot as plt
 %matplotlib inline
 
 filename = "sales_january.xlsx"
+data = pd.read_excel(filename, index_col=0)
 ```
 When printing the `data` dataframe, we get the following:
 
