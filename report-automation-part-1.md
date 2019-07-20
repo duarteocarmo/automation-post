@@ -108,9 +108,7 @@ The first step is to parameterize our notebook, to do this, let us create a `tem
 
 The cell with the `parameters` tag, will allow you to run this notebook from another python script while feeding the `filename` variable, any value you would like. 
 
-Now that we have everything in place, let's generate a report for a new `february_sales.xlsx` excel file.
-
-Your directory should look like this: 
+Your directory should look like this:
 
 ```bash
 ├── sales_february.xlsx
@@ -120,7 +118,11 @@ Your directory should look like this:
 └── template.ipynb
 ```
 
-To do this, in a new python file, or python console, run the following:
+You can always browse the code in the [github repo](https://github.com/duarteocarmo/automation-post). 
+
+Now that we have everything in place, let's generate a report for a new `february_sales.xlsx` excel file.
+
+To do it, in a new python file, or python console, run the following:
 
 ```python
 import papermill as pm
@@ -154,6 +156,8 @@ Which means, that Papermill has generated a new notebook for us, based on the `s
 </center>
 <br/>
 
-This is pretty handy! We could have a continuous script that always runs this notebook with different sales reports from different months. But how can we automate the process even more? 
+This is pretty handy! We could have a continuous script that always runs this notebook with different sales reports from different months. But how can we automate the process even more? Stay tuned to learn how!
 
 In the second part of this series, you will learn how to bring all of this together to build a full report automation workflow that your colleagues can use! Sign up to the [mailing list](https://pbpython.com/pages/mailinglist.html) to make sure you are alerted when the next part comes out!
+
+Browse the all of the notebooks and files in the [github repo](https://github.com/duarteocarmo/automation-post).
