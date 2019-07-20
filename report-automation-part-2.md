@@ -1,24 +1,24 @@
+MAKE SURE TO ADD LINKS TO PART 1 BEFORE PUBLISHING
+
+About the author:
+
+*My name is [Duarte Carmo](https://duarteocarmo.com/) and I'm a product manager and digital consultant. Originally from Lisbon - Portugal, but currently living and working in Copenhagen - Denmark. Find more about my work and leisure in [my website](https://duarteocarmo.com/).*
+
 # Automating report generation with Papermill and Rclone: Part 2 - Designing a solution
 
-My name is [Duarte Carmo](https://duarteocarmo.com/) and I'm a product manager and digital consultant at [Jabra](https://www.jabra.com/). Originally from Lisbon - Portugal, but currently living and working in Copenhagen - Denmark. Find more about my work and leasure in [my website](https://duarteocarmo.com/). 
-
-Welcome to part 2 of this two part series post about automating report generation using python, jupyter, papermill, and a couple of other tools.
+Welcome to part 2 of this two-part series post about automating report generation using python, jupyter, papermill, and a couple of other tools.
 
 In the first part **LINK FIRST PART!!!**, we covered 4 main important processes that are part of the automation process. In this second and final part, we will bring everything together and build our report automation system. 
 
-
-Before you begin, please note that all the code was written in python 3.7 and that you might have to adapt the code for older versions of python.
-
-Alright, let's get to work. 
-
+*Note: This code was written in python 3.7. You might have to adapt the code for older versions of python.*
 
 ## A workflow to automatically generate reports in a shared cloud folder
 
-Let's imagine you want to generate automatic reports for every similar excel file. Furthemore, you want to share them with your colleagues. Your colleagues are interested in the reports, but not learning to program python, how would you proceed? 
+Let's imagine you want to generate automatic reports for every similar excel file of sales reports. You also want to share them with your colleagues. Your colleagues are interested in the reports, but not in learning how to program python, how would you proceed? 
 
-There are a lot of options, and hardly any incorrect ones, but one I found particularly interesting was using what we already had in a company: a cloud folder (Google Drive, OneDrive, Dropbox). 
+There are a lot of options, and hardly any incorrect ones, but one I found particularly interesting was using what we already had company: a cloud folder (Google Drive, OneDrive, Dropbox). 
 
-Cloud folders are very popular in companies, particularly shared ones. So a good idea would be to create a shared folder where everyone can upload sales excel reports, and automatically generate `html` reports from them, so everyone can read!
+Cloud folders are very popular in companies, particularly shared ones. So a good idea would be to create a shared folder where everyone can upload sales excel reports, and automatically generate Html reports from them, so everyone can read!
 
 Here is the basic architecture of the solution: 
 
@@ -32,36 +32,38 @@ Let's describe each one of the steps:
 - A user uploads a new excel sales report to a shared cloud folder.
 - We sync the cloud folder with a local folder and detect that new excel sales report.
 - We use papermill to generate a new notebook file from that new excel sales report. 
-- We use nbconvert to generate an html file from that new notebook file. 
-- We upload the html file to the cloud folder, so the user can read it.  
+- We use nbconvert to generate an Html file from that new notebook file. 
+- We upload the Html file to the cloud folder, so the user can read it.  
 
 Let's start building this step by step: 
 
 #### 1.Sync a cloud folder with a local folder and detect new files 
-To sync cloud directories with local directories, we will a tool called [Rclone](https://rclone.org/). Of course we will integrate it with python.
+To sync cloud directories with local directories, we will a tool called [Rclone](https://rclone.org/). Of course, we will integrate it with python.
 
-Start by installing rclone in the same machine as your local folder (your personal computer or a virtual private server for example). On a Mac or linux: 
+Start by installing rclone in the same machine as your local folder (your personal computer or a virtual private server for example). 
+
+To do so, on a Mac or Linux machine, you should: 
 
 ```bash
 $ curl https://rclone.org/install.sh | sudo bash
 ```
-On windows, download the executable in the [Rclone downloads page](https://rclone.org/downloads/). 
+On Windows, download the executable in the [Rclone downloads page](https://rclone.org/downloads/). 
 
-Once rclone is installed, we must configure it, depending on your cloud provider (Dropbox, Google Drive, OneDrive), the instructions will vary, so make sure the follow the [configuration instructions](https://rclone.org/).
+Once rclone is installed, we must configure it. Depending on your cloud provider (Dropbox, Google Drive, OneDrive), the instructions will vary, so make sure to follow the [configuration instructions](https://rclone.org/).
 
-Once configured, lets do a first sync from the command line: 
+Once configured, let us do a first sync from the command line: 
 
 ```bash
 $ rclone sync remote:REMOTE_FOLDER_NAME LOCAL_FOLDER_NAME
 ```
 This will sync your local folder with your remote folder. 
 
-This can also easily be done from a python file using the core `subprocess` library. That allows you to run command line programs from python:
+We can also spark this command from a python script using the core [`subprocess` library](https://docs.python.org/3/library/subprocess.html). That allows you to run command-line programs from python:
 
 ```python
 import subprocess
 
-# define our variables, or folder names. 
+# define our variables 
 REMOTE_FOLDER_NAME="shared folder"
 LOCAL_FOLDER="local folder"
 
@@ -70,7 +72,9 @@ subprocess.run(
         ["rclone", "sync", f"remote:{REMOTE_FOLDER_NAME}", LOCAL_FOLDER]
     )
 ```
-Now that we know how to sync a local and a cloud directory, how do we detect if a user has uploaded a new file to our cloud directory? Well, an option would be to navigate to our local directory and use the `ls` command. Rclone also [allows us](https://rclone.org/commands/rclone_ls/) to list files in our cloud directory. Having this, we can create a python function that detects new files if they have been uploaded:
+Now that we know how to sync a local and a cloud directory, how do we detect if a user has uploaded a new file to our cloud directory? Well, an option would be to navigate to our local directory and use the `ls` command and see what pops out. 
+
+Rclone also [allows us](https://rclone.org/commands/rclone_ls/) to list files in our cloud directory. Having this, we can create a python function that detects new files if they have been uploaded to the cloud folder:
 
 ```python
 def get_new_files(remote_folder, local_folder):
@@ -107,16 +111,16 @@ def get_new_files(remote_folder, local_folder):
 ```
 A couple of notes about the script above: 
 - The `capture_output` file in the `subprocess.run` function, allows us to capture the output of the command. The `text` flag allows us to treat everything as text, avoiding problems with spaces for example.
-- After running `subprocess.run`, we apply the `.split` function, this is because the output of the `subprocess.run` function is a list of different files separated by a line break (`\n`). This split function allows us to but all the elements into a nicely formatted list. 
+- After running `subprocess.run`, we apply the `.split` function, this is because of the output of the `subprocess.run` function is a string of different files separated by a line break (`\n`). This split function allows us to but all the elements into a nicely formatted python list. 
 - The `new_files` list will contain only files that are in the cloud directory, but not in the local directory, or in other words: the excel file that users have uploaded to the cloud drive. In case there are no differences, the function will return an empty list. 
 
 #### 2.Using Papermill and Nbconvert to generate new reports
 
 Once we have a reliable way of detecting if new files are uploaded to the cloud, we now need to process that new file and generate an `html` report from it. 
 
-To do this, we will use two of the tools mentioned in the first part of this article: papermill, and nbconvert. 
+We will use two of the tools mentioned in the [first part of this article]() ADD LINK: papermill, and nbconvert. 
 
-We start by creating a function that will create a new notebook file, based on an excel report. Using of course, a notebook template (as for example `template.ipynb`) as previously decribed. 
+We start by creating a function that will produce a new notebook file, based on an excel report. Using, of course, a notebook template (for example `template.ipynb`) as [previously described in part 1]()ADD LINK. 
 
 ```python
 import papermill as pm
@@ -133,7 +137,7 @@ def run_notebook(excel_report, notebook_template):
     return no_extension_name
 ```
 
-Then, we must convert the notebook to an html file. To do this, we create another function that calls the `nbconvert` command from the python interpreter. 
+Then, we must convert the notebook to an Html file. To do this, we create another function that calls the `nbconvert` command from the python interpreter. 
 
 ```python
 import subprocess
@@ -153,7 +157,7 @@ def generate_html_report(notebook_file):
 
 This function runs the nbconvert command previously described in the beginning of the article, from a python script. 
 
-#### 4.Uploading an html file back to the cloud folder
+#### 4.Uploading an Html file back to the cloud folder
 
 There is another Rclone command that is pretty handy. If you want to push a file from a local folder to a cloud folder, you can use the following from the command line:
 
@@ -161,7 +165,7 @@ There is another Rclone command that is pretty handy. If you want to push a file
 $ rclone copy FILENAME remote:REMOTE_FOLDER_NAME
 ```
 
-We could do it from the command line, but why not use it from python? With the subprocess library, it's pretty straighforward:
+We could do it from the command line, but why do it from python? With the subprocess library, it's pretty straightforward:
 
 
 ```python
@@ -175,7 +179,7 @@ def push_to_cloud(remote_folder, html_report):
 ```
 
 #### 5.Bringing it all together
-So finally, after giving you a rundown of all of the major tools and processes, the full script that scans the cloud folder for new excel sales reports, and generates and uploads an html analysis of them is presented. 
+So finally, after giving you a rundown of all of the major tools and processes, here is the full script that scans the cloud folder for new excel sales reports, and generates and uploads an Html analysis of them is presented. 
 
 The script, `cloud_reporter.py` follows:
 
@@ -192,8 +196,7 @@ TEMPLATE_NOTEBOOK = "template_notebook.ipynb"
 
 def get_new_files(remote_folder, local_folder):
     """
-    A function that returns files that were uploaded to the cloud folder and 
-    do not exist in our local folder. 
+    A function that returns files that were uploaded to the cloud folder and do not exist in our local folder. 
     """
     # list the files in our cloud folder
     list_cloud = subprocess.run(
@@ -322,11 +325,11 @@ if __name__ == "main":
 
 #### 6.Running the updater regularly
 
-Once you get the script running, one option is to copy it to a virtual private server (digital ocean link) and have it run regulary via something like `cron`. 
+Once you get the script running, one option is to copy it to a virtual private server (digital ocean link) and have it run regularly via something like `cron`. 
 
 ⚠️Warning: If you are going to sync sensitive company information to a virtual private server, please make sure that you have permission, and that you take [necessary security measures](https://www.digitalocean.com/community/tutorials/7-security-measures-to-protect-your-servers) to protect the server. 
 
-You should [read more about `cron`](https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/) before messing with it, but a basic approach would be:
+You should [read more about `cron`](https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/) before messing with it. It allows you to run scripts every X amount of time. A simple approach to our problem would be:
 
 1. Make sure the script is running successfully in your server by:
     - Installing and configuring rclone.
@@ -335,21 +338,41 @@ You should [read more about `cron`](https://www.ostechnix.com/a-beginners-guide-
     - Modifying the script above with your variables (base notebook, remote folder name, and local folder name).
     - Making sure the script runs.
 
-2. Editing your crontab by doing:
+2. Editing your crontab by:
 
 ```bash
 $ crontab -e
 ```
 
-3. Adding a crontab job that navigates to a certain directory and runs the `cloud_reporter.py` file, every X minutes. 
+3. Adding a crontab job that navigates to a certain directory and runs the `cloud_reporter.py` file, every X minutes using python. 
 
-Here an example of it running every 4 minutes:
+Here is an example of it running every 4 minutes:
 
 ```bash
 */4 * * * * python /path/to/your/folder/cloud_reporter.py
 ```
 
-4. Upload a new excel file to your cloud folder and wait a minimum of 4 minutes, and a new html report shoud be generated!
+4. Upload a new excel file to your cloud folder and wait a minimum of 4 minutes, and a new Html report should be generated and uploaded automatically!
+
+5. Give access to the shared cloud folder (Dropbox, Google Drive) to your colleagues, and let them upload any excel report. 
+
+## Final thoughts
+
+And just like this, we reach the end of this article series!
+
+Hopefully, these tools and scripts will inspire you to go out and automate report generation or any other process around you. Making it as simple as possible to your colleagues to generate reports. 
+
+I would like to thank [Chris](https://twitter.com/chris1610) for allowing me to collaborate with him in these posts. I really had a blast building these tools and writing these "guides". [A team effort](https://github.com/duarteocarmo/automation-post/issues/1) that started with a simple reach out on twitter:
 
 
-ENDING NOTES....
+<br/>
+<center>
+<img src="images/reach_out.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+</center>
+<br/>
+
+
+All of the code for this article series is in [this GitHub repo](https://github.com/duarteocarmo/automation-post). 
+
+
+
