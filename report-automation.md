@@ -162,7 +162,7 @@ Here is the basic architecture of the solution:
 
 <br/>
 <center>
-<img src="images/architecture.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+<img src="images/process_flow.png" alt="excel" style="width:60%; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 </center>
 <br/>
 
