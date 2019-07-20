@@ -312,6 +312,8 @@ if __name__ == "main":
 
 Once you get the script running, one option is to copy it to a virtual private server (digital ocean link) and have it run regulary via something like `cron`. 
 
+⚠️Warning: If you are going to sync sensitive company information to a virtual private server, please make sure that you have permission, and that you take [necessary security measures](https://www.digitalocean.com/community/tutorials/7-security-measures-to-protect-your-servers) to protect the server. 
+
 You should [read more about `cron`](https://www.ostechnix.com/a-beginners-guide-to-cron-jobs/) before messing with it, but a basic approach would be:
 
 1. Make sure the script is running successfully in your server by:
