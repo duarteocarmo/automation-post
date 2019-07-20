@@ -1,5 +1,17 @@
 # Automating report generation with Papermill and Rclone: Part 2 - Designing a solution
 
+My name is [Duarte Carmo](https://duarteocarmo.com/) and I'm a product manager and digital consultant at [Jabra](https://www.jabra.com/). Originally from Lisbon - Portugal, but currently living and working in Copenhagen - Denmark. Find more about my work and leasure in [my website](https://duarteocarmo.com/). 
+
+Welcome to part 2 of this two part series post about automating report generation using python, jupyter, papermill, and a couple of other tools.
+
+In the first part **LINK FIRST PART!!!**, we covered 4 main important processes that are part of the automation process. In this second and final part, we will bring everything together and build our report automation system. 
+
+
+Before you begin, please note that all the code was written in python 3.7 and that you might have to adapt the code for older versions of python.
+
+Alright, let's get to work. 
+
+
 ## A workflow to automatically generate reports in a shared cloud folder
 
 Let's imagine you want to generate automatic reports for every similar excel file. Furthemore, you want to share them with your colleagues. Your colleagues are interested in the reports, but not learning to program python, how would you proceed? 
