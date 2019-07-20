@@ -118,7 +118,7 @@ Your directory should look like this:
 └── template.ipynb
 ```
 
-You can always browse the code in the [github repo](https://github.com/duarteocarmo/automation-post). 
+You can always browse the code in the [GitHub repo](https://github.com/duarteocarmo/automation-post). 
 
 Now that we have everything in place, let's generate a report for a new `february_sales.xlsx` excel file.
 
@@ -160,4 +160,4 @@ This is pretty handy! We could have a continuous script that always runs this no
 
 In the second part of this series, you will learn how to bring all of this together to build a full report automation workflow that your colleagues can use! Sign up to the [mailing list](https://pbpython.com/pages/mailinglist.html) to make sure you are alerted when the next part comes out!
 
-Browse the all of the notebooks and files in the [github repo](https://github.com/duarteocarmo/automation-post).
+Browse the all of the notebooks and files in the [GitHub repo](https://github.com/duarteocarmo/automation-post).
