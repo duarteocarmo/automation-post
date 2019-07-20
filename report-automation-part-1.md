@@ -1,10 +1,10 @@
 About the author:
 
-*My name is [Duarte Carmo](https://duarteocarmo.com/) and I'm a product manager and digital consultant. Originally from Lisbon - Portugal, but currently living and working in Copenhagen - Denmark. Find more about my work and leasure in [my website](https://duarteocarmo.com/).*
+*My name is [Duarte Carmo](https://duarteocarmo.com/) and I'm a product manager and digital consultant. Originally from Lisbon - Portugal, but currently living and working in Copenhagen - Denmark. Find more about my work and leisure in [my website](https://duarteocarmo.com/).*
 
 # Automating report generation with Papermill and Rclone: Part 1 - Tool roundup
 
-Welcome to part 1 of this two part series post about automating report generation using python, jupyter, papermill, and a couple of other tools. 
+Welcome to part 1 of this two-part series post about automating report generation using python, jupyter, papermill, and a couple of other tools. 
 
 In the first part, we will cover 4 main important workflows that are part of the automation process. In the second and final part, we will bring everything together and build our own report automation system. 
 
@@ -14,11 +14,11 @@ Alright, let's get to work.
 
 ## Automating report generation with Python - Why? 
 
-Not everyone can code. This might seem like an obvious statement, but once you start using python to automate or analyze things around you, you start to encounter a big problem: **reproducability**. Not everyone knows how to run your scripts, use your tools, or even use a modern browser. 
+Not everyone can code. This might seem like an obvious statement, but once you start using python to automate or analyze things around you, you start to encounter a big problem: **reproducibility**. Not everyone knows how to run your scripts, use your tools, or even use a modern browser. 
 
 Let us say you built a killer script. How exactly do you make someone who has never heard the word "python" use it? You could teach them python, but that would take a long time.
 
-In this series , we will teach you how you can automatically generate shareable html reports from any excel file using a combination of tools, centered around python.  
+In this series, we will teach you how you can automatically generate shareable Html reports from any excel file using a combination of tools, centered around python.  
 
 ## Creating a Jupyter Notebook reports from Excel files
 
@@ -32,7 +32,7 @@ Let us say you have an excel file (`sales_january.xlsx`) with a list of the sale
 
 Let's start by using a jupyter notebook `sales_january.ipynb` to create a very simple analysis of that sales data. 
 
-We start by importing the [pandas](https://pandas.pydata.org/) and [maplotlib](https://matplotlib.org/) libraries. After that we specify the name of our file using the `filename` variable. Finally, we use the `read_excel` function to read our data into a pandas dataframe. 
+We start by importing the [pandas](https://pandas.pydata.org/) and [maplotlib](https://matplotlib.org/) libraries. After that, we specify the name of our file using the `filename` variable. Finally, we use the `read_excel` function to read our data into a pandas DataFrame. 
 
 ```python
 import pandas as pd
@@ -67,22 +67,22 @@ And we get the following:
 And that's it! We got ourselves a [jupyter notebook](src/sales_january.ipynb) that analyzes (a very simple analysis let us say) a sales report in excel. Now let's say we want to share that report with other people in the organization, what do we do? 
 
 
-## Generating html reports from Jupyter Notebooks to share with colleagues
+## Generating Html reports from Jupyter Notebooks to share with colleagues
 
-In my experience, the easiest way to share a report with colleagues is to use a little tool called [nbconvert](https://nbconvert.readthedocs.io/en/latest/). Nbconvert allows you to generate an html version of your notebook. To install it simply run `pip install nbconvert`.
+In my experience, the easiest way to share a report with colleagues is to use a little tool called [nbconvert](https://nbconvert.readthedocs.io/en/latest/). Nbconvert allows you to generate an Html version of your notebook. To install it simply run `pip install nbconvert`.
 
 To do this, start by navigating to the same directory where your notebook is and run the following from your terminal: 
 
 ```bash
 $ jupyter nbconvert sales_january.ipynb
 ```
-You will see that a new file named `sales_january.html` was created. HTML files are better than `ipynb` in the measure that they are easily shareable via email, message, or any other way. Just make sure the person receiving the file opens it via a relatively modern browser.
+You will see that a new file named `sales_january.html` was created. Html files are better than `ipynb` in the measure that they are easily shareable via email, message, or any other way. Just make sure the person receiving the file opens it via a relatively modern browser.
 
 But lets us say that this sales report comes in every month, how can we automatically run this notebook with any excel file that has the same format? 
 
 ## Automating report generation using papermill
 
-[Papermill](https://papermill.readthedocs.io/en/latest/) is a handy tool that allows us to "parameterize and execute" Jupyter Notebooks. This basically means that papermill allows you execute the same jupyter notebook, with different variables defined outside its context. 
+[Papermill](https://papermill.readthedocs.io/en/latest/) is a handy tool that allows us to "parameterize and execute" Jupyter Notebooks. This basically means that papermill allows you to execute the same jupyter notebook, with different variables defined outside its context. 
 
 To install it, run `pip install papermill`, or follow the more complete [installation instructions](https://papermill.readthedocs.io/en/latest/installation.html).
 
@@ -106,7 +106,7 @@ The first step is to parameterize our notebook, to do this, let us create a `tem
 (If you have trouble adding a tag to your notebook, visit [this link](https://papermill.readthedocs.io/en/latest/usage-parameterize.html#notebook))
 
 
-The cell with the `parameters` tag, will basically allow you to run this notebook from another python script, while feeding the `filename` variable, any value you would like. 
+The cell with the `parameters` tag, will allow you to run this notebook from another python script while feeding the `filename` variable, any value you would like. 
 
 Now that we have everything in place, let's generate a report for a new `february_sales.xlsx` excel file.
 
@@ -120,7 +120,7 @@ Your directory should look like this:
 └── template.ipynb
 ```
 
-To do this, in a new python file, or in your python console, run the following:
+To do this, in a new python file, or python console, run the following:
 
 ```python
 import papermill as pm
@@ -132,7 +132,7 @@ pm.execute_notebook(
 )
 ```
 
-Let's brake this down: the `pm.execute_notebook` function takes 3 arguments. The first, `template.ipynb` is the name of the file what we will use as a base to run our notebook, the one with the `parameters` tag. The second argument, is the name of the new notebook that we will generate with the new arguments. Finally, `parameters` is a dictionnary of the variables that we want to impose to our template, in this case, the `filename` variable, that will now point to our february sales report. 
+Let's break this down: the `pm.execute_notebook` function takes 3 arguments. The first, `template.ipynb` is the name of the file what we will use as a base to run our notebook, the one with the `parameters` tag. The second argument is the name of the new notebook that we will generate with the new arguments. Finally, `parameters` is a dictionary of the variables that we want to impose to our template, in this case, the `filename` variable, that will now point to our February sales report. 
 
 After running the above code, you will notice a new file in your directory: 
 
