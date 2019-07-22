@@ -8,9 +8,11 @@ About the author:
 
 Welcome to part 2 of this two-part series post about automating report generation using python, jupyter, papermill, and a couple of other tools.
 
-In the first part **LINK FIRST PART!!!**, we covered 4 main important processes that are part of the automation process. In this second and final part, we will bring everything together and build our report automation system. 
+In the [first part](https://pbpython.com/papermil-rclone-report-1.html), we covered 4 main important processes that are part of the automation process. In this second and final part, we will bring everything together and build our report automation system. 
 
 *Note: This code was written in python 3.7. You might have to adapt the code for older versions of python.*
+
+All of the code for this article is available on [GitHub](https://github.com/duarteocarmo/automation-post).
 
 ## A workflow to automatically generate reports in a shared cloud folder
 
@@ -118,9 +120,9 @@ A couple of notes about the script above:
 
 Once we have a reliable way of detecting if new files are uploaded to the cloud, we now need to process that new file and generate an `html` report from it. 
 
-We will use two of the tools mentioned in the [first part of this article]() ADD LINK: papermill, and nbconvert. 
+We will use two of the tools mentioned in the [first part of this article](https://pbpython.com/papermil-rclone-report-1.html): papermill, and nbconvert. 
 
-We start by creating a function that will produce a new notebook file, based on an excel report. Using, of course, a notebook template (for example `template.ipynb`) as [previously described in part 1]()ADD LINK. 
+We start by creating a function that will produce a new notebook file, based on an excel report. Using, of course, a notebook template (for example `template.ipynb`) as [previously described in part 1](https://pbpython.com/papermil-rclone-report-1.html). 
 
 ```python
 import papermill as pm
@@ -325,7 +327,7 @@ if __name__ == "main":
 
 #### 6.Running the updater regularly
 
-Once you get the script running, one option is to copy it to a virtual private server (digital ocean link) and have it run regularly via something like `cron`. 
+Once you get the script running, one option is to copy it to a virtual private server (you can get one in [digitalocean.com](https://www.digitalocean.com/products/linux-distribution/ubuntu/) for example) and have it run regularly via something like `cron`. 
 
 ⚠️Warning: If you are going to sync sensitive company information to a virtual private server, please make sure that you have permission, and that you take [necessary security measures](https://www.digitalocean.com/community/tutorials/7-security-measures-to-protect-your-servers) to protect the server. 
 
